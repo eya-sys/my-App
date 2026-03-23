@@ -12,10 +12,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'MyApp',
-      theme: ThemeData(
-        primarySwatch: Colors.deepPurple,
-      ),
+      title: 'BEN AMMAR STORE',
+      theme: ThemeData(primarySwatch: Colors.deepPurple),
       home: const WelcomePage(),
     );
   }
@@ -36,29 +34,16 @@ class _WelcomePageState extends State<WelcomePage> {
   bool obscurePassword = true;
   bool isLoading = false;
 
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-
   Future<void> loginWithEmail() async {
-    if (!_formKey.currentState!.validate()) {
-      return;
-    }
+    if (!_formKey.currentState!.validate()) return;
 
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
     await Future.delayed(const Duration(milliseconds: 800));
 
     if (!mounted) return;
 
-    setState(() {
-      isLoading = false;
-    });
+    setState(() => isLoading = false);
 
     Navigator.push(
       context,
@@ -68,32 +53,19 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Future<void> openExternalLogin(String url) async {
     final uri = Uri.parse(url);
-
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
-    } else {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Impossible d'ouvrir le lien")),
-      );
     }
   }
 
   String? validateEmail(String? value) {
-    final email = value?.trim() ?? '';
-    if (email.isEmpty) return "Veuillez saisir votre email";
-
-    final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
-    if (!emailRegex.hasMatch(email)) return "Email invalide";
-
+    if (value == null || value.isEmpty) return "Veuillez saisir votre email";
     return null;
   }
 
   String? validatePassword(String? value) {
-    final password = value ?? '';
-    if (password.isEmpty) return "Veuillez saisir votre mot de passe";
-    if (password.length < 6) {
-      return "Le mot de passe doit contenir au moins 6 caractères";
+    if (value == null || value.length < 6) {
+      return "Mot de passe minimum 6 caractères";
     }
     return null;
   }
@@ -103,297 +75,110 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       body: Stack(
         children: [
+          /// BACKGROUND
           Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black,
-                    Color(0xFF140D00),
-                    Color(0xFF2B1B00),
-                    Colors.black,
-                  ],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
+            child: Image.asset(
+              "assets/images/bg.jpeg",
+              fit: BoxFit.cover,
             ),
           ),
-          Positioned(
-            top: -80,
-            left: -60,
-            child: Container(
-              width: 220,
-              height: 220,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.amber.withOpacity(0.08),
-              ),
-            ),
+
+          /// DARK OVERLAY
+          Positioned.fill(
+            child: Container(color: Colors.black.withOpacity(0.6)),
           ),
-          Positioned(
-            bottom: -100,
-            right: -80,
-            child: Container(
-              width: 260,
-              height: 260,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.amber.withOpacity(0.05),
-              ),
-            ),
-          ),
+
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 28,
-                  ),
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 540),
-                    child: Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 22,
-                            vertical: 10,
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.35),
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(
-                              color: Colors.amber.withOpacity(0.45),
-                            ),
-                          ),
-                          child: const Text(
-                            "BEN AMMAR STORE",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w800,
-                              color: Colors.amber,
-                              letterSpacing: 1.8,
-                            ),
-                          ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
+                  child: Column(
+                    children: [
+                      /// LOGO
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withOpacity(0.4),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(color: Colors.amber),
                         ),
-                        const SizedBox(height: 22),
-                        const Text(
-                          "Bienvenue",
-                          style: TextStyle(
-                            fontSize: 34,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                        child: Image.asset(
+                          "assets/images/logo.jpeg",
+                          height: 150,
                         ),
-                        const SizedBox(height: 8),
-                        const Text(
-                          "Connectez-vous pour continuer",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white70,
-                          ),
+                      ),
+
+                      const SizedBox(height: 25),
+
+                      const Text(
+                        "Bienvenue",
+                        style: TextStyle(
+                          fontSize: 34,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                        const SizedBox(height: 28),
-                        Container(
-                          padding: const EdgeInsets.all(22),
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.96),
-                            borderRadius: BorderRadius.circular(24),
-                            border: Border.all(
-                              color: Colors.amber.withOpacity(0.5),
-                              width: 1.2,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.25),
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
+                      ),
+
+                      const SizedBox(height: 8),
+
+                      const Text(
+                        "Connectez-vous pour continuer",
+                        style: TextStyle(color: Colors.white70),
+                      ),
+
+                      const SizedBox(height: 28),
+
+                      /// LOGIN BOX
+                      Container(
+                        padding: const EdgeInsets.all(22),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(24),
+                        ),
+                        child: Form(
+                          key: _formKey,
+                          child: Column(
+                            children: [
+                              TextFormField(
+                                controller: emailController,
+                                validator: validateEmail,
+                                decoration:
+                                    const InputDecoration(labelText: "Email"),
+                              ),
+                              const SizedBox(height: 15),
+                              TextFormField(
+                                controller: passwordController,
+                                obscureText: obscurePassword,
+                                validator: validatePassword,
+                                decoration: const InputDecoration(
+                                  labelText: "Mot de passe",
+                                ),
+                              ),
+                              const SizedBox(height: 20),
+                              SizedBox(
+                                width: double.infinity,
+                                child: ElevatedButton(
+                                  onPressed:
+                                      isLoading ? null : loginWithEmail,
+                                  child: const Text("Se connecter"),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              ElevatedButton.icon(
+                                onPressed: () {
+                                  openExternalLogin(
+                                      "https://accounts.google.com/");
+                                },
+                                icon: const Icon(Icons.g_mobiledata),
+                                label: const Text("Google"),
                               ),
                             ],
                           ),
-                          child: Form(
-                            key: _formKey,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "Connexion avec email",
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                                const SizedBox(height: 14),
-                                TextFormField(
-                                  controller: emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  validator: validateEmail,
-                                  decoration: InputDecoration(
-                                    labelText: "Email",
-                                    prefixIcon: const Icon(Icons.email_outlined),
-                                    filled: true,
-                                    fillColor: const Color(0xFFF8F8F8),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFD0D0D0),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                      borderSide: const BorderSide(
-                                        color: Colors.amber,
-                                        width: 2,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 16),
-                                TextFormField(
-                                  controller: passwordController,
-                                  obscureText: obscurePassword,
-                                  validator: validatePassword,
-                                  decoration: InputDecoration(
-                                    labelText: "Mot de passe",
-                                    prefixIcon: const Icon(Icons.lock_outline),
-                                    filled: true,
-                                    fillColor: const Color(0xFFF8F8F8),
-                                    suffixIcon: IconButton(
-                                      icon: Icon(
-                                        obscurePassword
-                                            ? Icons.visibility_off_outlined
-                                            : Icons.visibility_outlined,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          obscurePassword = !obscurePassword;
-                                        });
-                                      },
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                      borderSide: const BorderSide(
-                                        color: Color(0xFFD0D0D0),
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(14),
-                                      borderSide: const BorderSide(
-                                        color: Colors.amber,
-                                        width: 2,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 22),
-                                SizedBox(
-                                  width: double.infinity,
-                                  height: 54,
-                                  child: ElevatedButton(
-                                    onPressed: isLoading ? null : loginWithEmail,
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.black,
-                                      foregroundColor: Colors.amber,
-                                      elevation: 3,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                    ),
-                                    child: isLoading
-                                        ? const SizedBox(
-                                            width: 22,
-                                            height: 22,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2.5,
-                                              color: Colors.amber,
-                                            ),
-                                          )
-                                        : const Text(
-                                            "Se connecter",
-                                            style: TextStyle(
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                  ),
-                                ),
-                                const SizedBox(height: 18),
-                                const Center(
-                                  child: Text(
-                                    "Ou continuer avec",
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(height: 14),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          openExternalLogin(
-                                            "https://www.facebook.com/login",
-                                          );
-                                        },
-                                        icon: const Icon(Icons.facebook),
-                                        label: const Text("Facebook"),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.amber,
-                                          minimumSize:
-                                              const Size.fromHeight(50),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: ElevatedButton.icon(
-                                        onPressed: () {
-                                          openExternalLogin(
-                                            "https://accounts.google.com/",
-                                          );
-                                        },
-                                        icon: const Icon(
-                                          Icons.g_mobiledata,
-                                          size: 28,
-                                        ),
-                                        label: const Text("Google"),
-                                        style: ElevatedButton.styleFrom(
-                                          backgroundColor: Colors.black,
-                                          foregroundColor: Colors.amber,
-                                          minimumSize:
-                                              const Size.fromHeight(50),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(14),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -424,280 +209,30 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.black,
         foregroundColor: Colors.amber,
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black, Color(0xFF2C1A00)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+      body: GridView.builder(
+        padding: const EdgeInsets.all(16),
+        itemCount: categories.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
         ),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: GridView.builder(
-            itemCount: categories.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-            ),
-            itemBuilder: (context, index) {
-              final category = categories[index];
+        itemBuilder: (context, index) {
+          final category = categories[index];
 
-              return Card(
-                color: Colors.black.withOpacity(0.85),
-                elevation: 4,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                  side: const BorderSide(color: Colors.amber, width: 1),
-                ),
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(16),
-                  onTap: () {
-                    if (category["title"] == "Games") {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ServicesPage(),
-                        ),
-                      );
-                    } else {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "${category["title"]} bientôt disponible",
-                          ),
-                        ),
-                      );
-                    }
-                  },
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        category["icon"],
-                        size: 50,
-                        color: Colors.amber,
-                      ),
-                      const SizedBox(height: 10),
-                      Text(
-                        category["title"],
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ServicesPage extends StatelessWidget {
-  const ServicesPage({super.key});
-
-  final List<String> services = const [
-    "Free Fire",
-    "PUBG",
-    "Mobile Legends",
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Games Services"),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.amber,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black, Color(0xFF2C1A00)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: ListView.builder(
-          itemCount: services.length,
-          itemBuilder: (context, index) {
-            return Card(
-              color: Colors.black.withOpacity(0.85),
-              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: const BorderSide(color: Colors.amber, width: 1),
-              ),
-              child: ListTile(
-                title: Text(
-                  services[index],
+          return Card(
+            color: Colors.black,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(category["icon"], size: 50, color: Colors.amber),
+                const SizedBox(height: 10),
+                Text(
+                  category["title"],
                   style: const TextStyle(color: Colors.white),
                 ),
-                trailing: const Icon(Icons.arrow_forward, color: Colors.amber),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          OrderPage(service: services[index]),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-}
-
-class OrderPage extends StatefulWidget {
-  final String service;
-
-  const OrderPage({super.key, required this.service});
-
-  @override
-  State<OrderPage> createState() => _OrderPageState();
-}
-
-class _OrderPageState extends State<OrderPage> {
-  final TextEditingController playerController = TextEditingController();
-
-  final List<Map<String, String>> packages = [
-    {"diamonds": "100 Diamonds", "price": "2\$"},
-    {"diamonds": "300 Diamonds", "price": "5\$"},
-    {"diamonds": "500 Diamonds", "price": "9\$"},
-    {"diamonds": "1000 Diamonds", "price": "17\$"},
-  ];
-
-  @override
-  void dispose() {
-    playerController.dispose();
-    super.dispose();
-  }
-
-  Future<void> sendOrderToWhatsApp(String diamonds, String price) async {
-    if (playerController.text.trim().isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Enter Player ID")),
-      );
-      return;
-    }
-
-    final message =
-        "Service: ${widget.service}\n"
-        "Player ID: ${playerController.text.trim()}\n"
-        "Package: $diamonds\n"
-        "Price: $price";
-
-    final url = Uri.parse(
-      "https://wa.me/21625654745?text=${Uri.encodeComponent(message)}",
-    );
-
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Impossible d'ouvrir WhatsApp")),
-      );
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.service),
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.amber,
-      ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.black, Color(0xFF2C1A00)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              TextField(
-                controller: playerController,
-                style: const TextStyle(color: Colors.white),
-                decoration: InputDecoration(
-                  labelText: "Player ID",
-                  labelStyle: const TextStyle(color: Colors.amber),
-                  border: const OutlineInputBorder(),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.amber),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.amber, width: 2),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Choose Package",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.amber,
-                  fontSize: 18,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: packages.length,
-                  itemBuilder: (context, index) {
-                    final package = packages[index];
-
-                    return Card(
-                      color: Colors.black.withOpacity(0.85),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(14),
-                        side: const BorderSide(color: Colors.amber, width: 1),
-                      ),
-                      child: ListTile(
-                        title: Text(
-                          package["diamonds"]!,
-                          style: const TextStyle(color: Colors.white),
-                        ),
-                        subtitle: Text(
-                          "Price: ${package["price"]}",
-                          style: const TextStyle(color: Colors.amber),
-                        ),
-                        trailing: const Icon(
-                          Icons.shopping_cart,
-                          color: Colors.amber,
-                        ),
-                        onTap: () {
-                          sendOrderToWhatsApp(
-                            package["diamonds"]!,
-                            package["price"]!,
-                          );
-                        },
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
