@@ -85,7 +85,14 @@ class _WelcomePageState extends State<WelcomePage> {
 
           /// DARK OVERLAY
           Positioned.fill(
-            child: Container(color: Colors.black.withOpacity(0.6)),
+            child: Container(
+  decoration: const BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage("assets/images/bg.jpeg"),
+      fit: BoxFit.cover,
+    ),
+  ),
+),
           ),
 
           SafeArea(
@@ -205,6 +212,14 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("BEN AMMAR STORE"),
+        SizedBox(height: 20),
+
+Image.asset(
+  "assets/images/logo.jpeg",
+  height: 160,
+),
+
+SizedBox(height: 20),
         centerTitle: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.amber,
