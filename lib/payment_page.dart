@@ -22,7 +22,38 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   String? selectedMethod;
 
+  late TextEditingController idController;
+  late TextEditingController phoneController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    idController = TextEditingController(
+      text: widget.playerId,
+    );
+
+    phoneController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    idController.dispose();
+    phoneController.dispose();
+    super.dispose();
+  }
+
   Future<void> sendOrderToWhatsApp() async {
+    if (idController.text.trim().isEmpty ||
+        phoneController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Remplissez tous les champs"),
+        ),
+      );
+      return;
+    }
+
     if (selectedMethod == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
@@ -32,12 +63,13 @@ class _PaymentPageState extends State<PaymentPage> {
       return;
     }
 
-    String phone = "21625654745";
+    const String phone = "21625654745";
 
     String message =
         "BEN AMMAR STORE\n\n"
         "Service: ${widget.game}\n"
-        "Numéro / ID: ${widget.playerId}\n"
+        "ID: ${idController.text.trim()}\n"
+        "Téléphone: ${phoneController.text.trim()}\n"
         "Offre: ${widget.package}\n"
         "Prix: ${widget.price}\n"
         "Paiement: $selectedMethod";
@@ -47,9 +79,13 @@ class _PaymentPageState extends State<PaymentPage> {
     );
 
     if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
+      await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
     } else {
       if (!mounted) return;
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Impossible d'ouvrir WhatsApp"),
@@ -70,9 +106,11 @@ class _PaymentPageState extends State<PaymentPage> {
           });
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: isSelected ? Colors.amber : Colors.white,
+          backgroundColor:
+              isSelected ? Colors.amber : Colors.white,
           foregroundColor: Colors.black,
-          padding: const EdgeInsets.symmetric(vertical: 16),
+          padding:
+              const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -94,16 +132,18 @@ class _PaymentPageState extends State<PaymentPage> {
       backgroundColor: Colors.black,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        iconTheme: const IconThemeData(color: Colors.amber),
+        iconTheme:
+            const IconThemeData(color: Colors.amber),
         title: const Text(
           "Payment",
           style: TextStyle(color: Colors.amber),
         ),
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(20),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
           children: [
             const Text(
               "Order Summary",
@@ -113,27 +153,70 @@ class _PaymentPageState extends State<PaymentPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             const SizedBox(height: 20),
+
             Text(
               "Service: ${widget.game}",
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
             ),
+
             const SizedBox(height: 8),
-            Text(
-              "Numéro / ID: ${widget.playerId}",
-              style: const TextStyle(color: Colors.white, fontSize: 16),
-            ),
-            const SizedBox(height: 8),
+
             Text(
               "Offre: ${widget.package}",
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
             ),
+
             const SizedBox(height: 8),
+
             Text(
               "Prix: ${widget.price}",
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+              ),
             ),
-            const SizedBox(height: 40),
+
+            const SizedBox(height: 30),
+
+            TextField(
+              controller: idController,
+              style:
+                  const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText: "Player ID",
+                labelStyle:
+                    TextStyle(color: Colors.amber),
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 15),
+
+            TextField(
+              controller: phoneController,
+              keyboardType:
+                  TextInputType.phone,
+              style:
+                  const TextStyle(color: Colors.white),
+              decoration: const InputDecoration(
+                labelText:
+                    "Numéro de téléphone",
+                labelStyle:
+                    TextStyle(color: Colors.amber),
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 30),
+
             const Text(
               "Choisissez une méthode de paiement",
               style: TextStyle(
@@ -142,15 +225,27 @@ class _PaymentPageState extends State<PaymentPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
+
             const SizedBox(height: 20),
+
             paymentButton("eDinar"),
+
             const SizedBox(height: 12),
+
             paymentButton("Flouci"),
+
             const SizedBox(height: 12),
+
             paymentButton("Carte Bancaire"),
+
             const SizedBox(height: 12),
-            paymentButton("Paiement à la livraison"),
+
+            paymentButton(
+              "Paiement à la livraison",
+            ),
+
             const SizedBox(height: 30),
+
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -158,16 +253,22 @@ class _PaymentPageState extends State<PaymentPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                  padding:
+                      const EdgeInsets.symmetric(
+                    vertical: 18,
+                  ),
+                  shape:
+                      RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(16),
                   ),
                 ),
                 child: const Text(
                   "Confirmer et envoyer",
                   style: TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
+                    fontWeight:
+                        FontWeight.bold,
                   ),
                 ),
               ),
