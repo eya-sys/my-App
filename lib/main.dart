@@ -1,3 +1,7 @@
+import 'platforms_page.dart';
+import 'formations_page.dart';
+import 'products_page.dart';
+import 'home_page_new.dart';
 import 'package:flutter/material.dart';
 import 'payment_page.dart';
 import 'recharge_page.dart';
@@ -39,7 +43,7 @@ class WelcomePage extends StatelessWidget {
                 children: [
                   Positioned.fill(
                     child: Image.asset(
-                      "assets/images/home.jpeg",
+                      "assets/images/home_new.jpeg",
                       fit: BoxFit.contain,
                     ),
                   ),
@@ -153,6 +157,62 @@ class WelcomePage extends StatelessWidget {
                       ),
                     ),
                   ),
+                  // Plateformes Pro
+Positioned(
+  left: w * (130 / 1024),
+  top: h * (880 / 1536),
+  width: w * (200 / 1024),
+  height: h * (140 / 1536),
+  child: click(
+    context,
+    () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const PlatformsPage(),
+        ),
+      );
+    },
+  ),
+),
+
+// Formations & Coaching
+Positioned(
+  left: w * (390 / 1024),
+  top: h * (880 / 1536),
+  width: w * (200 / 1024),
+  height: h * (140 / 1536),
+  child: click(
+    context,
+    () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const FormationsPage(),
+        ),
+      );
+    },
+  ),
+),
+
+// Produits Physiques
+Positioned(
+  left: w * (650 / 1024),
+  top: h * (880 / 1536),
+  width: w * (200 / 1024),
+  height: h * (140 / 1536),
+  child: click(
+    context,
+    () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => const ProductsPage(),
+        ),
+      );
+    },
+  ),
+),
                 ],
               );
             },
