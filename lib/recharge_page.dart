@@ -9,7 +9,15 @@ Widget build(BuildContext context) {
 return Scaffold(
 backgroundColor: Colors.black,
 appBar: AppBar(
-title: const Text("Recharge Jeux"),
+title: const Text(
+  "Recharge Jeux",
+  style: TextStyle(
+        fontSize: 32,
+    fontWeight: FontWeight.bold,
+      color: Colors.amber,
+    letterSpacing: 1,
+  ),
+),
 backgroundColor: Colors.black,
 foregroundColor: Colors.amber,
 ),
@@ -25,38 +33,68 @@ gameCard(context, "Valorant", "475 VP", "8 DT"),
 ),
 );
 }
-
 Widget gameCard(
 BuildContext context,
 String game,
 String pack,
 String price,
 ) {
+  String imagePath;
+
+if (game == "Free Fire") {
+  imagePath = "assets/images/freefire.png";
+} else if (game == "PUBG") {
+  imagePath = "assets/images/pubg.png";
+} else {
+  imagePath = "assets/images/valorant.png";
+}
 return Container(
 margin: const EdgeInsets.only(bottom: 15),
 decoration: BoxDecoration(
-color: const Color(0xFF111111),
-borderRadius: BorderRadius.circular(18),
-border: Border.all(
-color: Colors.amber,
-width: 1.2,
-),
+  gradient: const LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [
+      Color(0xFF111111),
+      Color(0xFF1A1A1A),
+    ],
+  ),
+  borderRadius: BorderRadius.circular(20),
+  border: Border.all(
+    color: Colors.amber,
+    width: 1.2,
+  ),
+  boxShadow: [
+    BoxShadow(
+      color: Colors.amber.withOpacity(0.15),
+      blurRadius: 20,
+      spreadRadius: 1,
+      offset: const Offset(0, 5),
+    ),
+  ],
 ),
 child: ListTile(
 contentPadding: const EdgeInsets.symmetric(
 horizontal: 20,
-vertical: 8,
+vertical: 4,
 ),
-leading: CircleAvatar(
-backgroundColor: Colors.amber,
-child: Text(
-game.substring(0, 1),
-style: const TextStyle(
-color: Colors.black,
-fontWeight: FontWeight.bold,
-fontSize: 20,
-),
-),
+leading: Container(
+  width: 55,
+  height: 55,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(14),
+    border: Border.all(
+      color: Colors.amber,
+      width: 1.5,
+    ),
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(12),
+    child: Image.asset(
+      imagePath,
+      fit: BoxFit.cover,
+    ),
+  ),
 ),
 title: Text(
 game,
@@ -72,22 +110,42 @@ style: const TextStyle(
 color: Colors.white70,
 ),
 ),
-trailing: Container(
-padding: const EdgeInsets.symmetric(
-horizontal: 12,
-vertical: 8,
-),
-decoration: BoxDecoration(
-color: Colors.amber,
-borderRadius: BorderRadius.circular(10),
-),
-child: Text(
-price,
-style: const TextStyle(
-color: Colors.black,
-fontWeight: FontWeight.bold,
-),
-),
+trailing: Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    const Icon(
+      Icons.arrow_forward_ios,
+      color: Colors.amber,
+      size: 18,
+    ),
+    const SizedBox(width: 12),
+
+    Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 16,
+        vertical: 12,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        borderRadius: BorderRadius.circular(14),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.amber.withOpacity(0.4),
+            blurRadius: 15,
+            spreadRadius: 2,
+          ),
+        ],
+      ),
+      child: Text(
+        price,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+        ),
+      ),
+    ),
+  ],
 ),
 onTap: () {
 final TextEditingController idController =
@@ -96,70 +154,100 @@ TextEditingController();
         context: context,
         builder: (context) {
           return AlertDialog(
-            backgroundColor: const Color(0xFF111111),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20),
-              side: const BorderSide(
-                color: Colors.amber,
-                width: 1,
-              ),
-            ),
-            title: const Text(
-              "Entrer votre ID",
-              style: TextStyle(
-                color: Colors.amber,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            content: TextField(
-              controller: idController,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-              decoration: const InputDecoration(
-                hintText: "Player ID",
-                hintStyle: TextStyle(
-                  color: Colors.white54,
-                ),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  "Annuler",
-                  style: TextStyle(
-                    color: Colors.amber,
-                  ),
-                ),
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  if (idController.text.trim().isEmpty) {
-                    return;
-                  }
+  backgroundColor: const Color(0xFF111111),
+  shape: RoundedRectangleBorder(
+    borderRadius: BorderRadius.circular(20),
+    side: const BorderSide(
+      color: Colors.amber,
+      width: 1.2,
+    ),
+  ),
 
-                  Navigator.pop(context);
+  title: Text(
+    game,
+    style: const TextStyle(
+      color: Colors.amber,
+      fontWeight: FontWeight.bold,
+    ),
+  ),
 
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PaymentPage(
-                        game: game,
-                        package: pack,
-                        price: price,
-                        playerId:
-                            idController.text.trim(),
-                      ),
-                    ),
-                  );
-                },
-                child: const Text("Continuer"),
-              ),
-            ],
-          );
+  content: TextField(
+    controller: idController,
+    style: const TextStyle(
+      color: Colors.white,
+    ),
+    decoration: InputDecoration(
+      hintText: "Player ID",
+      hintStyle: const TextStyle(
+        color: Colors.white54,
+      ),
+      filled: true,
+      fillColor: const Color(0xFF1A1A1A),
+
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(
+          color: Colors.amber,
+        ),
+      ),
+
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
+        borderSide: const BorderSide(
+          color: Colors.amber,
+          width: 2,
+        ),
+      ),
+    ),
+  ),
+
+  actions: [
+    TextButton(
+      onPressed: () => Navigator.pop(context),
+      child: const Text(
+        "Annuler",
+        style: TextStyle(
+          color: Colors.white70,
+        ),
+      ),
+    ),
+
+    ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.amber,
+        foregroundColor: Colors.black,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+      onPressed: () {
+  Navigator.pop(context);
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PaymentPage(
+        game: game,
+        package: pack,
+        price: price,
+        playerId: idController.text,
+      ),
+    ),
+  );
+},
+      child: const Text(
+        "Continuer",
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+  ],
+);
         },
       );
     },

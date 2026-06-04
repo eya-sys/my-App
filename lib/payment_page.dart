@@ -142,92 +142,150 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
+Widget build(BuildContext context) {
+  return Scaffold(
+    backgroundColor: Colors.black,
+    appBar: AppBar(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.amber,
-        title: const Text("Paiement"),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+      foregroundColor: Colors.amber,
+      title: const Text("Paiement"),
+      centerTitle: true,
+    ),
+    body: SingleChildScrollView(
+      padding: const EdgeInsets.all(20),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: const Color(0xFF111111),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.amber),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.amber.withOpacity(0.15),
+              blurRadius: 20,
+              spreadRadius: 1,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(15),
-              decoration: BoxDecoration(
-                color: const Color(0xFF111111),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.amber,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment:
-                    CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Résumé de la commande",
-                    style: TextStyle(
-                      color: Colors.amber,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-
-                  Text(
-                    "Service : ${widget.game}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-
-                  const SizedBox(height: 6),
-
-                  Text(
-                    "Offre : ${widget.package}",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
-                  ),
-
-                  const SizedBox(height: 10),
-
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.amber,
-                      borderRadius:
-                          BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      widget.price,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
+            const Text(
+              "Résumé de la commande",
+              style: TextStyle(
+                color: Colors.amber,
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
               ),
             ),
+
+            const SizedBox(height: 12),
+
+            Row(
+              children: [
+                const Icon(
+                  Icons.sports_esports,
+                  color: Colors.amber,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+  "🎮 Service : ${widget.game}",
+  style: const TextStyle(
+    color: Colors.white,
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+  ),
+),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+
+            Row(
+              children: [
+                const Icon(
+                  Icons.card_giftcard,
+                  color: Colors.amber,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    "🎁 Offre : ${widget.package}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 10),
+
+            Row(
+              children: [
+                const Icon(
+                  Icons.person,
+                  color: Colors.amber,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    "👤 ID : ${widget.playerId}",
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 15),
+
+            Center(
+  child: Container(
+    padding: const EdgeInsets.symmetric(
+      horizontal: 30,
+      vertical: 12,
+    ),
+    decoration: BoxDecoration(
+      gradient: const LinearGradient(
+        colors: [
+          Color(0xFFFFD54F),
+          Color(0xFFFFC107),
+        ],
+      ),
+      borderRadius: BorderRadius.circular(15),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.amber.withValues(alpha: 0.4),
+          blurRadius: 15,
+        ),
+      ],
+    ),
+    child: Text(
+      widget.price,
+      style: const TextStyle(
+        color: Colors.black,
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  ),
+),
 
             const SizedBox(height: 25),
 
             TextField(
               controller: idController,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+              style: const TextStyle(color: Colors.white),
               decoration: fieldDecoration(
                 "Email / ID / Numéro",
               ),
@@ -238,9 +296,7 @@ class _PaymentPageState extends State<PaymentPage> {
             TextField(
               controller: phoneController,
               keyboardType: TextInputType.phone,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
+              style: const TextStyle(color: Colors.white),
               decoration: fieldDecoration(
                 "Numéro de téléphone",
               ),
@@ -248,32 +304,38 @@ class _PaymentPageState extends State<PaymentPage> {
 
             const SizedBox(height: 30),
 
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Méthode de paiement",
-                style: TextStyle(
-                  color: Colors.amber,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
+            const Text(
+              "Méthode de paiement",
+              style: TextStyle(
+                color: Colors.amber,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+
+            const SizedBox(height: 8),
+
+            const Text(
+              "Après paiement, envoyez une preuve de paiement sur WhatsApp.",
+              style: TextStyle(
+                color: Colors.white70,
+                fontSize: 13,
               ),
             ),
 
             const SizedBox(height: 15),
 
-            paymentButton("💳 eDinar"),
+            paymentButton("📱 D17"),
             const SizedBox(height: 12),
 
             paymentButton("📱 Flouci"),
             const SizedBox(height: 12),
 
-            paymentButton("🏦 Carte Bancaire"),
+            paymentButton("💳 e-Dinar"),
             const SizedBox(height: 12),
 
-            paymentButton("🚚 Paiement à la livraison"),
-
-            const SizedBox(height: 30),
+            paymentButton("🏦 Virement Bancaire"),
+            const SizedBox(height: 20),
 
             SizedBox(
               width: double.infinity,
@@ -286,23 +348,19 @@ class _PaymentPageState extends State<PaymentPage> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                onPressed: sendOrderToWhatsApp,
+                              onPressed: sendOrderToWhatsApp,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF25D366),
                   foregroundColor: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     vertical: 18,
                   ),
-                  side: 
-                       const BorderSide(
+                  side: const BorderSide(
                     color: Colors.amber,
-                  width: 1,
-                 ),
-                  shape:
-                      RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.circular(16),
+                    width: 1,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
               ),
@@ -310,6 +368,7 @@ class _PaymentPageState extends State<PaymentPage> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

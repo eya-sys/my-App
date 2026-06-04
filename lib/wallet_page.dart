@@ -40,6 +40,19 @@ class WalletPage extends StatelessWidget {
     String amount,
     String price,
   ) {
+    String imagePath;
+
+if (wallet == "PayPal") {
+  imagePath = "assets/images/paypal.png";
+} else if (wallet == "Skrill") {
+  imagePath = "assets/images/skrill.webp";
+} else if (wallet == "Wise") {
+  imagePath = "assets/images/wise.webp";
+} else if (wallet == "Neteller") {
+  imagePath = "assets/images/neteller.png";
+} else {
+  imagePath = "assets/images/pm.webp";
+}
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
@@ -51,7 +64,7 @@ class WalletPage extends StatelessWidget {
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.amber.withOpacity(0.15),
+            color: Colors.amber.withValues(alpha: 0.15),
             blurRadius: 10,
             spreadRadius: 1,
           ),
@@ -62,14 +75,21 @@ class WalletPage extends StatelessWidget {
           horizontal: 20,
           vertical: 10,
         ),
-        leading:  CircleAvatar(
-           backgroundColor: Colors.amber,
-  child: Text(
-    wallet.substring(0, 1),
-    style: const TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: 20,
+leading: Container(
+  width: 55,
+  height: 55,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(14),
+    border: Border.all(
+      color: Colors.amber,
+      width: 1.5,
+    ),
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(12),
+    child: Image.asset(
+      imagePath,
+      fit: BoxFit.contain,
     ),
   ),
 ),
@@ -87,36 +107,129 @@ class WalletPage extends StatelessWidget {
             color: Colors.white70,
           ),
         ),
-        trailing: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 8,
-          ),
-          decoration: BoxDecoration(
+        trailing: Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        price,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+    const SizedBox(width: 10),
+    const Icon(
+      Icons.arrow_forward_ios,
+      color: Colors.amber,
+      size: 18,
+    ),
+  ],
+),
+       onTap: () {
+  TextEditingController idController =
+      TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFF111111),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(
             color: Colors.amber,
-            borderRadius: BorderRadius.circular(10),
+            width: 1.2,
           ),
-          child: Text(
-            price,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+        ),
+        title: Text(
+          wallet,
+          style: const TextStyle(
+            color: Colors.amber,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: TextField(
+          controller: idController,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+          decoration: InputDecoration(
+            hintText: "Player ID",
+            hintStyle: const TextStyle(
+              color: Colors.white54,
+            ),
+            filled: true,
+            fillColor: const Color(0xFF1A1A1A),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Colors.amber,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Colors.amber,
+                width: 2,
+              ),
             ),
           ),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => PaymentPage(
-                game: wallet,
-                package: amount,
-                price: price,
-                playerId: "",
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(
+              "Annuler",
+              style: TextStyle(
+                color: Colors.white70,
               ),
             ),
-          );
-        },
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amber,
+              foregroundColor: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PaymentPage(
+                    game: wallet,
+                    package: amount,
+                    price: price,
+                    playerId:
+                        idController.text.trim(),
+                  ),
+                ),
+              );
+            },
+            child: const Text(
+              "Continuer",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+},
       ),
     );
   }

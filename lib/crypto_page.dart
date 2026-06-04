@@ -43,6 +43,17 @@ class CryptoPage extends StatelessWidget {
     String amount,
     String price,
   ) {
+    String imagePath;
+
+if (crypto == "Bitcoin") {
+  imagePath = "assets/images/bitcoin.png";
+} else if (crypto == "Ethereum") {
+  imagePath = "assets/images/etherum.png";
+} else if (crypto.contains("USDT")) {
+  imagePath = "assets/images/usdt.png";
+} else {
+  imagePath = "assets/images/bnb.webp";
+}
     return Container(
       margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
@@ -65,17 +76,30 @@ class CryptoPage extends StatelessWidget {
           horizontal: 20,
           vertical: 10,
         ),
-        leading:  CircleAvatar(
-          backgroundColor: Colors.amber,
-          child: Text(
-            crypto.substring(0, 1),
-    style: const TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.bold,
-      fontSize: 20,
+        leading: Container(
+  width: 55,
+  height: 55,
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(14),
+    border: Border.all(
+      color: Colors.amber,
+      width: 1.5,
     ),
-  ),   
-        ),
+    boxShadow: [
+      BoxShadow(
+        color: Colors.amber.withValues(alpha: 0.2),
+        blurRadius: 8,
+      ),
+    ],
+  ),
+  child: ClipRRect(
+    borderRadius: BorderRadius.circular(12),
+    child: Image.asset(
+      imagePath,
+      fit: BoxFit.cover,
+    ),
+  ),
+),
         title: Text(
           crypto,
           style: const TextStyle(
@@ -90,36 +114,128 @@ class CryptoPage extends StatelessWidget {
             color: Colors.white70,
           ),
         ),
-        trailing: Container(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 12,
-            vertical: 8,
-          ),
-          decoration: BoxDecoration(
+       trailing: Row(
+  mainAxisSize: MainAxisSize.min,
+  children: [
+    Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 8,
+      ),
+      decoration: BoxDecoration(
+        color: Colors.amber,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Text(
+        price,
+        style: const TextStyle(
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    ),
+    const SizedBox(width: 10),
+    const Icon(
+      Icons.arrow_forward_ios,
+      color: Colors.amber,
+      size: 18,
+    ),
+  ],
+),
+      onTap: () {
+  TextEditingController idController =
+      TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        backgroundColor: const Color(0xFF111111),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: const BorderSide(
             color: Colors.amber,
-            borderRadius: BorderRadius.circular(10),
+            width: 1.2,
           ),
-          child: Text(
-            price,
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
+        ),
+        title: Text(
+          crypto,
+          style: const TextStyle(
+            color: Colors.amber,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        content: TextField(
+          controller: idController,
+          style: const TextStyle(
+            color: Colors.white,
+          ),
+          decoration: InputDecoration(
+            hintText: "Player ID",
+            hintStyle: const TextStyle(
+              color: Colors.white54,
+            ),
+            filled: true,
+            fillColor: const Color(0xFF1A1A1A),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Colors.amber,
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(
+                color: Colors.amber,
+                width: 2,
+              ),
             ),
           ),
         ),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => PaymentPage(
-                game: crypto,
-                package: amount,
-                price: price,
-                playerId: "",
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text(
+              "Annuler",
+              style: TextStyle(
+                color: Colors.white70,
               ),
             ),
-          );
-        },
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.amber,
+              foregroundColor: Colors.black,
+            ),
+            onPressed: () {
+              Navigator.pop(context);
+
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PaymentPage(
+                    game: crypto,
+                    package: amount,
+                    price: price,
+                    playerId: idController.text.trim(),
+                  ),
+                ),
+              );
+            },
+            child: const Text(
+              "Continuer",
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      );
+    },
+  );
+},
       ),
     );
   }
