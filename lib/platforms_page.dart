@@ -9,7 +9,7 @@ class PlatformsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text("Plateformes Pro"),
+        title: const Text("Plateformes Pro TEST"),
         centerTitle: true,
         backgroundColor: Colors.black,
         foregroundColor: Colors.amber,
